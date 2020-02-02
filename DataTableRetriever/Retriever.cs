@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using Dapper;
+using Microsoft.AspNetCore.Http;
 
 namespace DataTableRetriever
 {
@@ -31,8 +32,16 @@ namespace DataTableRetriever
         /// <param name="sortColumnDirection">The direction to sort the selected column</param>
         /// <param name="searchValue">The search term, returns records with a column containing the search value.</param>
         /// <returns>An instance of a Result object that contains an enumerable of results, an integer of the total size of the search result, and an integer of the draw.</returns>
-        public Result GetData(string start, string length, string sortColumn, string sortColumnDirection, string searchValue)
+        public Result GetData(HttpContext context)
         {
+            // assign values of start and length from HttpContext
+            string start = context.Request.Form["start"].FirstOrDefault();
+            string length = context.Request.Form["length"].FirstOrDefault();
+            //sort and search params
+            string sortColumn = context.Request.Form["columns[" + context.Request.Form["order[0][column]"].FirstOrDefault() + "][data]"].FirstOrDefault();
+            string sortColumnDirection = context.Request.Form["order[0][dir]"].FirstOrDefault();
+            string searchValue = context.Request.Form["search[value]"].FirstOrDefault();
+
             //Result is custom object that stores the dynamic list of results, the total size of records selected from after searching, and the Draw
             Result returnData = new Result();
 
@@ -47,7 +56,7 @@ namespace DataTableRetriever
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
 
             //if the context has a sort columns specified, overwrite the default with the requested column
-            if (!String.IsNullOrEmpty(sortColumn))
+            if (!string.IsNullOrEmpty(sortColumn))
             {
                 sortCol = sortColumn;
             }
@@ -63,7 +72,7 @@ namespace DataTableRetriever
                 }
             }
             rangeQuery += $" FROM {_tableName} ";
-            if (!String.IsNullOrEmpty(searchValue))
+            if (!string.IsNullOrEmpty(searchValue))
             {
                 parameters.Add("@searchTerm", "%" + searchValue + "%", DbType.String, ParameterDirection.Input);
                 rangeQuery += "WHERE ";
@@ -78,7 +87,7 @@ namespace DataTableRetriever
             }
             rangeQuery += $"ORDER BY {sortCol} {sortColumnDirection} OFFSET {skip} ROWS FETCH NEXT {pageSize} ROWS ONLY; ";
             rangeQuery += $"SELECT COUNT(*) FROM {_tableName} ";
-            if (!String.IsNullOrEmpty(searchValue))
+            if (!string.IsNullOrEmpty(searchValue))
             {
                 rangeQuery += "WHERE ";
                 for (int count = 0; count < listSize; count++)
