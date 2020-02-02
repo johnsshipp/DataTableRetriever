@@ -1,0 +1,54 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+<body>
+    <h1>Data Results</h1>
+    <div class="container-fluid">
+        <form id="searchBox" class="float-right" style="margin-right: 25px">
+            Search: <input type="text" id="tableSearch" />
+            <input type="submit" />
+        </form>
+        @*th names and column names in DataTable initialization must match *@
+        <table id="testTable" class="table table-bordered nowrap">
+            <thead>
+                <tr>
+                    <th>SoftwareProductId</th>
+                    <th>Name</th>
+                    <th>ImageId</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</body>
+<script>
+    $('document').ready(function () {
+        $('#testTable').DataTable({
+            "processing": false,
+            "serverSide": true,
+            //'f' is the 'filter' for the default search box. this must be removed so the form searchbox can be used.
+            "dom": 'l<t>ip',
+            "ajax": {
+                "url": "/Home/LoadData",
+                "type": "POST",
+                "datatype": "json"
+            },
+            "columnsDefs":
+                [{
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }],
+            //values in "data" must match column names in database
+            "columns": [
+                { "data": "Id", "name": "ProductId" },
+                { "data": "Name", "name": "Name" },
+                { "data": "Description", "name": "Description" }
+            ]
+        });
+    })
+    $('#searchBox').submit(function (e) {
+        e.preventDefault();
+        var input = $('#tableSearch');
+        $('#testTable').DataTable().search(input.val()).draw();
+    })
+</script>

@@ -1,0 +1,13 @@
+
+*.config
+.vs/DataTableRetriever/DesignTimeBuild/.dtbcache
+.vs/DataTableRetriever/v16/.suo
+.vs/DataTableRetriever/v16/Server/sqlite3/db.lock
+*.ide
+*.ide-shm
+*.ide-wal
+*.cache
+DataTableRetriever/obj/
+DataTableRetriever/bin/Debug/netstandard2.0/
+DataTableTester/bin/
+DataTableTester/obj/

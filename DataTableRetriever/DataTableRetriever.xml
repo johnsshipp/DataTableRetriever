@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DataTableRetriever</name>
+    </assembly>
+    <members>
+        <member name="M:DataTableRetriever.Retriever.GetData(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Method for retrieving data for use in a jquery datatable. Uses Select with Offset and fetch to return a range of data for a page that varies by the specified page size
+            and selected page. Also handles sorting by column and direction as well as a search term. 
+            </summary>
+            <param name="start">Paging parameter indicating where to begin pulling data</param>
+            <param name="length">Paging parameter for number of records to return for page size</param>
+            <param name="sortColumn">Which column is used as the sorting column</param>
+            <param name="sortColumnDirection">The direction to sort the selected column</param>
+            <param name="searchValue">The search term, returns records with a column containing the search value.</param>
+            <returns>An instance of a Result object that contains an enumerable of results, an integer of the total size of the search result, and an integer of the draw.</returns>
+        </member>
+    </members>
+</doc>
