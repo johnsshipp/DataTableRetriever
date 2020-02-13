@@ -3,9 +3,10 @@ var thIdsConstant;
 var currentPage;
 var sortColumn = "";
 var sortDirection = "ASC";
-
-function ajaxTable(tableId) {
+var ajaxURL;
+function ajaxTable(tableId, url) {
     tableIdConstant = tableId;
+    ajaxURL = url;
     currentPage = 1;
     var table = document.getElementById(tableId).innerHTML;
     var tableHeaderMatch = Array.from(table.matchAll('(?<= (<th id=")).*(?=(">(.*)<\/th>))'));
@@ -33,7 +34,7 @@ function addElements() {
 }
 function loadData() {
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/Home/LoadData/');
+    xhr.open('POST', ajaxURL);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onload = function () {
         if (xhr.status === 200) {
