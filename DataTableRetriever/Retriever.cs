@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using Dapper;
+using Microsoft.AspNetCore.Http;
 
 namespace DataTableRetriever
 {
@@ -47,7 +48,7 @@ namespace DataTableRetriever
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
 
             //if the context has a sort columns specified, overwrite the default with the requested column
-            if (!String.IsNullOrEmpty(sortColumn))
+            if (!string.IsNullOrEmpty(sortColumn))
             {
                 sortCol = sortColumn;
             }
@@ -63,7 +64,7 @@ namespace DataTableRetriever
                 }
             }
             rangeQuery += $" FROM {_tableName} ";
-            if (!String.IsNullOrEmpty(searchValue))
+            if (!string.IsNullOrEmpty(searchValue))
             {
                 parameters.Add("@searchTerm", "%" + searchValue + "%", DbType.String, ParameterDirection.Input);
                 rangeQuery += "WHERE ";
@@ -78,7 +79,7 @@ namespace DataTableRetriever
             }
             rangeQuery += $"ORDER BY {sortCol} {sortColumnDirection} OFFSET {skip} ROWS FETCH NEXT {pageSize} ROWS ONLY; ";
             rangeQuery += $"SELECT COUNT(*) FROM {_tableName} ";
-            if (!String.IsNullOrEmpty(searchValue))
+            if (!string.IsNullOrEmpty(searchValue))
             {
                 rangeQuery += "WHERE ";
                 for (int count = 0; count < listSize; count++)

@@ -6,6 +6,5 @@ namespace DataTableRetriever
     {
         public IEnumerable<dynamic> Results { get; set; }
         public int Size { get; set; }
-        public string Draw { get; set; }
     }
 }
