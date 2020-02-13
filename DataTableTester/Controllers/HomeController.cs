@@ -20,10 +20,16 @@ namespace DataTableTester.Controllers
         }
         public IActionResult LoadData()
         {
-            //pass the HttpContext to the retriever to hand off the start, length, and search/sort parameters
-            var dapperResult = _softwareProducts.GetData(HttpContext);
-            //define the draw for the result set from the HttpContext
-            return Json(new { draw = HttpContext.Request.Form["draw"].FirstOrDefault(), recordsFiltered = dapperResult.Size, recordsTotal = dapperResult.Size, data = dapperResult.Results });
+            // assign values of start and length from HttpContext
+            string start = HttpContext.Request.Form["start"].FirstOrDefault();
+            string length = HttpContext.Request.Form["length"].FirstOrDefault();
+            //sort and search params
+            string sortColumn = HttpContext.Request.Form["sortColumn"].FirstOrDefault();
+            string sortColumnDirection = HttpContext.Request.Form["sortDirection"].FirstOrDefault();
+            string searchValue = HttpContext.Request.Form["search"].FirstOrDefault();
+
+            var dapperResult = _softwareProducts.GetData(start, length, sortColumn, sortColumnDirection, searchValue);
+            return Json(new { recordsFiltered = dapperResult.Size, recordsTotal = dapperResult.Size, data = dapperResult.Results });
         }
     }
 }

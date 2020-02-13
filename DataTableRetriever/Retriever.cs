@@ -32,16 +32,8 @@ namespace DataTableRetriever
         /// <param name="sortColumnDirection">The direction to sort the selected column</param>
         /// <param name="searchValue">The search term, returns records with a column containing the search value.</param>
         /// <returns>An instance of a Result object that contains an enumerable of results, an integer of the total size of the search result, and an integer of the draw.</returns>
-        public Result GetData(HttpContext context)
+        public Result GetData(string start, string length, string sortColumn, string sortColumnDirection, string searchValue)
         {
-            // assign values of start and length from HttpContext
-            string start = context.Request.Form["start"].FirstOrDefault();
-            string length = context.Request.Form["length"].FirstOrDefault();
-            //sort and search params
-            string sortColumn = context.Request.Form["columns[" + context.Request.Form["order[0][column]"].FirstOrDefault() + "][data]"].FirstOrDefault();
-            string sortColumnDirection = context.Request.Form["order[0][dir]"].FirstOrDefault();
-            string searchValue = context.Request.Form["search[value]"].FirstOrDefault();
-
             //Result is custom object that stores the dynamic list of results, the total size of records selected from after searching, and the Draw
             Result returnData = new Result();
 
